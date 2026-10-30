@@ -1,0 +1,32 @@
+{
+  "title": "DeepAI Code Snippet",
+  "description": "",
+  "head": "<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />",
+  "htmlAttrs": "lang=\"en\" class=\"\"",
+  "tags": [],
+  "activeEditor": "markup",
+  "markup": {
+    "language": "html",
+    "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Cash App Pay Checkout</title>\n  <!-- Load the official Square Sandbox Web Payments SDK -->\n  <script src=\"https://web.squarecdn.com/v1/square.js\"></script>\n</head>\n<body>\n\n  <h2>Complete Your Checkout</h2>\n  \n  <form id=\"payment-form\">\n    <!-- Container where the official Cash App Pay button will inject -->\n    <div id=\"cash-app-pay\"></div>\n  </form>\n\n  <script>\n    async function initializeCashApp() {\n      // Check if Square SDK loaded successfully\n      if (!window.Square) {\n        throw new Error('Square.js failed to load');\n      }\n\n      // Initialize the payments object using your Square App ID and Location ID\n      // Replace these placeholders with your credentials from the Square Developer Dashboard\n      const payments = window.Square.payments('YOUR_SQUARE_APPLICATION_ID', 'YOUR_SQUARE_LOCATION_ID');\n\n      // 1. Build the digital payment request details\n      const paymentRequest = payments.paymentRequest({\n        countryCode: 'US',\n        currencyCode: 'USD',\n        total: {\n          amount: '1.00', // Dollar amount as a string\n          label: 'Total Payment'\n        }\n      });\n\n      try {\n        // 2. Initialize the Cash App instance\n        const cashAppPay = await payments.cashAppPay(paymentRequest, {\n          redirectURL: window.location.href, // Redirect path for mobile browsers\n          referenceId: 'order-id-12345'\n        });\n\n        // 3. Listen to the tokenization event\n        cashAppPay.addEventListener('ontokenization', ({ detail }) => {\n          const { tokenResult } = detail;\n          \n          if (tokenResult.status === 'OK') {\n            // Secure payment token generated!\n            console.log('Payment Token:', tokenResult.token);\n            alert('Success! Token generated: ' + tokenResult.token);\n            \n            // NEXT STEP: Send `tokenResult.token` to your backend server \n            // to process the actual charge using the Square Payments API.\n          } else {\n            console.error('Tokenization failed', tokenResult.errors);\n          }\n        });\n\n        // 4. Render the button inside your HTML container div\n        await cashAppPay.attach('#cash-app-pay', {\n          shape: 'semiround', // Options: 'round' or 'semiround'\n          theme: 'dark',      // Options: 'dark' or 'light'\n          size: 'medium'      // Options: 'medium' or 'small'\n        });\n\n      } catch (error) {\n        console.error('Failed to initialize Cash App Pay:', error);\n      }\n    }\n\n    // Run the script after the page loads\n    document.addEventListener('DOMContentLoaded', initializeCashApp);\n  </script>\n</body>\n</html"
+  },
+  "style": {
+    "language": "css",
+    "content": ""
+  },
+  "script": {
+    "language": "javascript",
+    "content": "curl -L -I 'PASTE_THE_URL_HERE'"
+  },
+  "stylesheets": [],
+  "scripts": [],
+  "cssPreset": "",
+  "processors": [],
+  "customSettings": {},
+  "imports": {},
+  "types": {},
+  "tests": {
+    "language": "typescript",
+    "content": ""
+  },
+  "version": "49"
+}

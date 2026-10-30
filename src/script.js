@@ -1,0 +1,1 @@
+curl -L -I 'PASTE_THE_URL_HERE'
